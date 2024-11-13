@@ -50,11 +50,13 @@ int main() {
 
 			Car car = queue.front(); // get the front car
 			queue.pop_front();
+			cout << "Car paid toll: [" << car.year << " " << car.manufacturer << " (" << car.transponder << ")]" << endl;
 
 		} else { // 45% chance of a new car being added to the back of the queue
 
 			Car newCar = Car(); // create a new car
 			queue.push_back(newCar); // add a new car to the back of the queue
+			cout << "Car joined lane: [" << newCar.year << " " << newCar.manufacturer << " (" << newCar.transponder << ")]" << endl;
 
 		}
 
@@ -73,6 +75,13 @@ int main() {
 void outputQueue(deque<Car>& queue) {
 
 	cout << "Queue:" << endl; // output queue header
+
+	if (queue.empty()) { // if the queue is empty, output "Empty" and return
+
+		cout << "  Empty" << endl << endl;
+		return;
+
+	}
 
 	for (Car car : queue)
 		cout << "  [" << car.year << " " << car.manufacturer << " (" << car.transponder << ")]" << endl;
