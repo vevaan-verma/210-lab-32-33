@@ -2,22 +2,7 @@
 using namespace std;
 #include <iostream>
 #include <deque>
-//#include "Car.h" (the file for Car.h isn't accessible currently, so I created a temporary struct below)
-
-struct Car {
-
-	string manufacturer;
-	int transponder;
-	int year;
-
-	Car() {
-
-		manufacturer = "Toyota";
-		transponder = 1001;
-		year = 2000;
-
-	}
-};
+#include "Car.h"
 
 /* FUNCTION PROTOTYPES */
 void outputQueue(deque<Car>& queue);
@@ -50,13 +35,15 @@ int main() {
 
 			Car car = queue.front(); // get the front car
 			queue.pop_front();
-			cout << "Car paid toll: [" << car.year << " " << car.manufacturer << " (" << car.transponder << ")]" << endl;
+			cout << "Car paid toll: ";
+			car.print(); // output the car that paid the toll
 
 		} else { // 45% chance of a new car being added to the back of the queue
 
 			Car newCar = Car(); // create a new car
 			queue.push_back(newCar); // add a new car to the back of the queue
-			cout << "Car joined lane: [" << newCar.year << " " << newCar.manufacturer << " (" << newCar.transponder << ")]" << endl;
+			cout << "Car joined lane: ";
+			newCar.print(); // output the new car
 
 		}
 
@@ -83,8 +70,12 @@ void outputQueue(deque<Car>& queue) {
 
 	}
 
-	for (Car car : queue)
-		cout << "  [" << car.year << " " << car.manufacturer << " (" << car.transponder << ")]" << endl;
+	for (Car car : queue) {
+
+		cout << "  "; // output indentation for formatting purposes
+		car.print(); // print each car in the queue
+
+	}
 
 	cout << endl; // output blank line for formatting purposes
 
