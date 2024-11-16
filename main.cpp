@@ -9,11 +9,11 @@ using namespace std;
 void outputQueue(deque<Car>& queue);
 
 /* CONSTANTS */
-const int INITIAL_CARS = 2;
 const int TIME_PERIODS = 20;
 const int PAY_TOLL = 46;
 const int JOIN_LANE = 39;
 const int CHANGE_LANE = 15;
+const int EMPTY_LANE_ENTER = 50;
 
 // main() is the entry point of the program and drives the program
 // arguments: none
@@ -54,13 +54,41 @@ int main() {
 
 			deque<Car>& lane = queues[j]; // get the reference to current lane (so we can modify it)
 
-			if (percentage <= PAY_TOLL) { // 46% chance (in this case) that front car pays toll and is removed from the queue
+			if (!lane.empty()) { // make sure the lane isn't empty, as different operations can't be performed on an empty lane
 
-				Car car = lane.front(); // get the front car
-				lane.pop_front(); // remove the front car
-				cout << "Lane " << j + 1 << " | Car paid toll: "; // output operation prefix
-				car.print(); // output the car that paid the toll
+				if (percentage <= PAY_TOLL) { // 46% chance (in this case) that front car pays toll and is removed from the queue
 
+					Car car = lane.front(); // get the front car
+					lane.pop_front(); // remove the front car
+					cout << "Lane " << j + 1 << " | Car paid toll: "; // output operation prefix
+					car.print(); // output the car that paid the toll
+
+				} else if (percentage <= JOIN_LANE) { // 39% chance (in this case) of a new car being added to the back of the queue
+
+					Car newCar = Car(); // create a new car
+					lane.push_back(newCar); // add a new car to the back of the queue
+					cout << "Lane " << j + 1 << " | Car joined lane : "; // output operation prefix
+					newCar.print(); // output the new car
+
+				} else { // 15% chance (in this case) of the rear car changing lanes to a different lane they aren't in
+
+					int newLane = (j + (rand() % 3 + 1)) % queues.size(); // generate a random lane excluding the current lane to move to
+
+				}
+			} else { // lane is empty
+
+				if (percentage <= EMPTY_LANE_ENTER) { // 50% chance (in this case) of a new car being added to the back of the queue
+
+					Car newCar = Car(); // create a new car
+					lane.push_back(newCar); // add a new car to the back of the queue
+					cout << "Lane " << j + 1 << " | Car joined lane: "; // output operation prefix
+					newCar.print(); // output the new car
+
+				} else { // 50% chance (in this case) of no operation
+
+					cout << "Lane " << j + 1 << " | No operation" << endl; // output no operation message
+
+				}
 			}
 		}
 
