@@ -9,6 +9,7 @@ void outputQueue(deque<Car>& queue);
 
 /* CONSTANTS */
 const int INITIAL_CARS = 2;
+const int PAYS_TOLL_PROBABILITY = 55;
 
 // main() is the entry point of the program and drives the program
 // arguments: none
@@ -31,7 +32,7 @@ int main() {
 
 		cout << "Time: " << time << " | Operation: "; // output time and operation prefix
 
-		if (percentage <= 55) { // 55% chance that front car pays toll and is removed from the queue
+		if (percentage <= PAYS_TOLL_PROBABILITY) { // 55% chance that front car pays toll and is removed from the queue
 
 			Car car = queue.front(); // get the front car
 			queue.pop_front();
