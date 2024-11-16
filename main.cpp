@@ -41,11 +41,6 @@ int main() {
 
 	for (int i = 1; i <= TIME_PERIODS; i++) { // run through all time periods
 
-		// probabilities
-		// 46% chance that the front car pays the toll
-		// 39% chance that a new car joins the lane
-		// 15% chance that a car changes lanes
-
 		int percentage = rand() % 100 + 1; // generate random percentage
 
 		cout << "Time: " << i << endl; // output time header
@@ -60,14 +55,14 @@ int main() {
 
 					Car car = lane.front(); // get the front car
 					lane.pop_front(); // remove the front car
-					cout << "Lane " << j + 1 << " | Car paid toll: "; // output operation prefix
+					cout << "Lane " << j + 1 << " | Paid: "; // output operation prefix
 					car.print(); // output the car that paid the toll
 
 				} else if (percentage <= JOIN_LANE) { // 39% chance (in this case) of a new car being added to the back of the queue
 
 					Car newCar = Car(); // create a new car
 					lane.push_back(newCar); // add a new car to the back of the queue
-					cout << "Lane " << j + 1 << " | Car joined lane : "; // output operation prefix
+					cout << "Lane " << j + 1 << " | Joined: "; // output operation prefix
 					newCar.print(); // output the new car
 
 				} else { // 15% chance (in this case) of the rear car changing lanes to a different lane they aren't in
@@ -76,7 +71,7 @@ int main() {
 					Car car = lane.back(); // get the rear car
 					lane.pop_back(); // remove the rear car
 					queues[newLane].push_back(car); // add the rear car to the rear of the new lane
-					cout << "Lane " << j + 1 << " | Car changed lanes: "; // output operation prefix
+					cout << "Lane " << j + 1 << " | Switched: "; // output operation prefix
 					car.print(); // output the car that changed lanes
 
 				}
@@ -86,7 +81,7 @@ int main() {
 
 					Car newCar = Car(); // create a new car
 					lane.push_back(newCar); // add a new car to the back of the queue
-					cout << "Lane " << j + 1 << " | Car joined lane: "; // output operation prefix
+					cout << "Lane " << j + 1 << " | Joined: "; // output operation prefix
 					newCar.print(); // output the new car
 
 				} else { // 50% chance (in this case) of no operation
@@ -112,7 +107,7 @@ void outputQueues(array<deque<Car>, 4>& queues) {
 
 	for (int i = 0; i < queues.size(); i++) { // iterate through each lane
 
-		cout << "Lane " << i << " Queue:" << endl; // output lane header
+		cout << "Lane " << i + 1 << " Queue:" << endl; // output lane header
 		deque<Car> lane = queues[i]; // get the lane
 
 		if (lane.empty()) { // if the lane is empty, output "  Empty" and return
