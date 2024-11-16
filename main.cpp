@@ -1,6 +1,7 @@
-// COMSC-210 | Lab 32 | Vevaan Verma
+// COMSC-210 | Lab 32, 33 | Vevaan Verma
 using namespace std;
 #include <iostream>
+#include <array>
 #include <deque>
 #include "Car.h"
 
@@ -9,6 +10,10 @@ void outputQueue(deque<Car>& queue);
 
 /* CONSTANTS */
 const int INITIAL_CARS = 2;
+const int TIME_PERIODS = 20;
+const int PAY_TOLL = 46;
+const int JOIN_LANE = 39;
+const int CHANGE_LANE = 15;
 
 // main() is the entry point of the program and drives the program
 // arguments: none
@@ -17,38 +22,49 @@ int main() {
 
 	srand(time(0)); // seed the random number generator
 
-	deque<Car> queue(INITIAL_CARS); // createa a deque of cars with 2 initial cars
+	array<deque<Car>, 4> queues; // create a deque of cars
 
-	cout << "Initial "; // add "Initial" as a prefix to the output
-	outputQueue(queue); // output initial queue
+	// initialize each queue with a random number of cars between 1 and 3
+	for (int i = 0; i < 4; i++) {
 
-	int time = 1; // initialize time to 0
+		// generate a random number of cars between 1 and 3
+		int numCars = rand() % 3 + 1;
 
-	while (!queue.empty()) { // loop while the queue is not empty
+		// add the cars to the queue
+		for (int j = 0; j < numCars; j++)
+			queues[i].push_back(Car());
 
-		// generate random percentage
-		int percentage = rand() % 100 + 1;
+	}
 
-		cout << "Time: " << time << " | Operation: "; // output time and operation prefix
+	cout << "Initial Queues:" << endl; // add "Initial" as a prefix to the output
+	outputQueue(queues); // output initial queue
 
-		if (percentage <= 55) { // 55% chance that front car pays toll and is removed from the queue
+	for (int i = 1; i <= TIME_PERIODS; i++) { // run through all time periods
 
-			Car car = queue.front(); // get the front car
-			queue.pop_front();
-			cout << "Car paid toll: ";
-			car.print(); // output the car that paid the toll
+		// probabilities
+		// 46% chance that the front car pays the toll
+		// 39% chance that a new car joins the lane
+		// 15% chance that a car changes lanes
 
-		} else { // 45% chance of a new car being added to the back of the queue
+		int percentage = rand() % 100 + 1; // generate random percentage
 
-			Car newCar = Car(); // create a new car
-			queue.push_back(newCar); // add a new car to the back of the queue
-			cout << "Car joined lane: ";
-			newCar.print(); // output the new car
+		cout << "Time: " << i << endl; // output time header
 
+		for (int j = 0; j < queues.size(); j++) { // iterate through each lane
+
+			deque<Car>& lane = queues[j]; // get the reference to current lane (so we can modify it)
+
+			if (percentage <= PAY_TOLL) { // 46% chance (in this case) that front car pays toll and is removed from the queue
+
+				Car car = lane.front(); // get the front car
+				lane.pop_front(); // remove the front car
+				cout << "Lane " << j + 1 << " | Car paid toll: "; // output operation prefix
+				car.print(); // output the car that paid the toll
+
+			}
 		}
 
-		outputQueue(queue); // output the queue
-		time++;
+		outputQueue(queues); // output the queues
 
 	}
 
