@@ -6,7 +6,7 @@ using namespace std;
 #include "Car.h"
 
 /* FUNCTION PROTOTYPES */
-void outputQueue(deque<Car>& queue);
+void outputQueues(array<deque<Car>, 4>& queue);
 
 /* CONSTANTS */
 const int TIME_PERIODS = 20;
@@ -37,7 +37,7 @@ int main() {
 	}
 
 	cout << "Initial Queues:" << endl; // add "Initial" as a prefix to the output
-	outputQueue(queues); // output initial queue
+	outputQueues(queues); // output initial queue
 
 	for (int i = 1; i <= TIME_PERIODS; i++) { // run through all time periods
 
@@ -73,6 +73,11 @@ int main() {
 				} else { // 15% chance (in this case) of the rear car changing lanes to a different lane they aren't in
 
 					int newLane = (j + (rand() % 3 + 1)) % queues.size(); // generate a random lane excluding the current lane to move to
+					Car car = lane.back(); // get the rear car
+					lane.pop_back(); // remove the rear car
+					queues[newLane].push_back(car); // add the rear car to the rear of the new lane
+					cout << "Lane " << j + 1 << " | Car changed lanes: "; // output operation prefix
+					car.print(); // output the car that changed lanes
 
 				}
 			} else { // lane is empty
@@ -92,7 +97,7 @@ int main() {
 			}
 		}
 
-		outputQueue(queues); // output the queues
+		outputQueues(queues); // output the queues
 
 	}
 
@@ -100,25 +105,29 @@ int main() {
 
 }
 
-// outputQueue() outputs the contents of the queue
-// arguments: deque<Car>& - the queue to output
+// outputQueues() outputs the queues of cars
+// arguments: array<deque<Car>, 4>& - the array of queues of cars
 // returns: void
-void outputQueue(deque<Car>& queue) {
+void outputQueues(array<deque<Car>, 4>& queues) {
 
-	cout << "Queue:" << endl; // output queue header
+	for (int i = 0; i < queues.size(); i++) { // iterate through each lane
 
-	if (queue.empty()) { // if the queue is empty, output "Empty" and return
+		cout << "Lane " << i << " Queue:" << endl; // output lane header
+		deque<Car> lane = queues[i]; // get the lane
 
-		cout << "  Empty" << endl << endl;
-		return;
+		if (lane.empty()) { // if the lane is empty, output "  Empty" and return
 
-	}
+			cout << "    Empty" << endl;
+			continue;
 
-	for (Car car : queue) {
+		}
 
-		cout << "  "; // output indentation for formatting purposes
-		car.print(); // print each car in the queue
+		for (Car car : lane) {
 
+			cout << "    "; // output indentation for formatting purposes
+			car.print(); // print each car in the lane
+
+		}
 	}
 
 	cout << endl; // output blank line for formatting purposes
